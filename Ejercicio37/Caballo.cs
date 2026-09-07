@@ -1,27 +1,72 @@
-﻿namespace Ejercicio37
+﻿using System;
+
+namespace movCaballos
 {
-    public class Caballo
+ public class Caballos
     {
-        public string ubicacion;
 
-        public Caballo(string ubicacion)
+
+        private static string[,] ajedrez = new string[8, 8];
+
+
+
+        public void PosCabInTabAjedrez(string[] PosCab)
         {
-            this.ubicacion = ubicacion;
+            foreach (string cab in PosCab)
+            {      
+                int columna = cab[0] - 'A';
+                int fila = 8 - (cab[1] - '0');
+
+                if (fila >= 0 && fila < 8 && columna >= 0 && columna < 8)
+                {
+                    ajedrez[fila, columna] = cab; 
+                }
+
+            }
+
+        }
+        public string[] MovimientInL(string PosCab)
+        {
+            string[] posMov = new string[8];
+
+            int[] DesplazamientoFilas = { 2, 2, -2, -2, 1, 1, -1, -1 };
+            int[] DesplazamientoColumnas = { 1, -1, 1, -1, 2, -2, 2, -2 };
+            int ContPos = 0;
+            int columna = PosCab[0] - 'A';
+            int fila = 8 - (PosCab[1] - '0');
+
+            for (int i = 0; i < 8; i++)
+            {
+                int nuevaFila = fila + DesplazamientoFilas[i];
+                int nuevaColumna = columna + DesplazamientoColumnas[i];
+
+                if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
+                {
+
+                    posMov[ContPos] = ConvertirAColumnaFilaAjedrez(nuevaFila, nuevaColumna);
+                    ContPos += 1;
+
+                }
+
+            }
+
+            return posMov;
         }
 
-        public bool EstaEnConflicto(Caballo otroCaballo)
+        public string ConvertirAColumnaFilaAjedrez(int fila, int columna)
         {
-            char columna1 = ubicacion[0];
-            int fila1 = int.Parse(ubicacion[1].ToString());
+            if (fila < 0 || fila > 7 || columna < 0 || columna > 7)
+            {
+                return "";
+            }
+            char letra = (char)('A' + columna);
+            int numeroFila = 8 - fila;
 
-            char columna2 = otroCaballo.ubicacion[0];
-            int fila2 = int.Parse(otroCaballo.ubicacion[1].ToString());
+            return $"{letra}{numeroFila}";
 
-            int diferenciaColumnas = Math.Abs(columna1 - columna2);
-            int diferenciaFilas = Math.Abs(fila1 - fila2);
-
-            return (diferenciaColumnas == 1 && diferenciaFilas == 2) ||
-                   (diferenciaColumnas == 2 && diferenciaFilas == 1);
         }
+
+
+
     }
 }

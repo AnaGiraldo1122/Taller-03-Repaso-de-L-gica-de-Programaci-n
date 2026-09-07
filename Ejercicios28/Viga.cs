@@ -6,11 +6,16 @@
 
         public Viga(string estructura)
         {
-            this.estructura = estructura;
+            this.estructura = estructura.Trim();
         }
 
         private int ObtenerResistencia()
         {
+            if (estructura.Length == 0)
+            {
+                return 0;
+            }
+
             if (estructura[0] == '%')
             {
                 return 10;
@@ -78,13 +83,14 @@
                 }
                 else if (estructura[i] == '*')
                 {
-                    pesoTotal += largueroActual;       
-                    pesoTotal += largueroActual * 2;   
+                    pesoTotal += largueroActual;
+                    pesoTotal += largueroActual * 2;
                     largueroActual = 0;
                 }
             }
 
-            pesoTotal += largueroActual; 
+            pesoTotal += largueroActual;
+
             return pesoTotal;
         }
 

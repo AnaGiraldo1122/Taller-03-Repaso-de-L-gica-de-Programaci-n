@@ -1,33 +1,55 @@
-﻿
-using Ejercicio37;
+﻿using movCaballos;
 using Shared;
 
-var ubicaciones = ConsoleExtension.GetString("Ingrese ubicación de los caballos: ");
+string[] poscaballos = new string[6];
+string[,] CaballosEnConflicto = new string[6, 2];
 
-var posiciones = ubicaciones!.Split(',');
+int indice = 0;
+string Conflito;
 
-Caballo[] caballos = new Caballo[posiciones.Length];
+Caballos Caballos = new Caballos();
 
-for (int i = 0; i < posiciones.Length; i++)
+string ubicaciones = ConsoleExtension.GetString("Ingrese ubicación de los caballos: ")!;
+
+poscaballos = ubicaciones.Split(',');
+
+Caballos.PosCabInTabAjedrez(poscaballos);
+
+foreach (string cab in poscaballos)
 {
-    caballos[i] = new Caballo(posiciones[i].Trim());
-}
+    string[] PosibleMov = Caballos.MovimientInL(cab);
 
-for (int i = 0; i < caballos.Length; i++)
-{
-    Console.Write($"Analizando Caballo en {caballos[i].ubicacion[1]}{caballos[i].ubicacion[0]} =>");
-
-    for (int j = caballos.Length - 1; j >= 0; j--)
+    for (int i = 0; i < poscaballos.Length; i++)
     {
-
-        if (i != j)
+        if (cab != poscaballos[i])
         {
-            if (caballos[i].EstaEnConflicto(caballos[j]))
+            for (int j = 0; j < PosibleMov.Length; j++)
             {
-                Console.Write($" Conflicto con {caballos[j].ubicacion[1]}{caballos[j].ubicacion[0]}");
+                if (PosibleMov[j] == poscaballos[i])
+                {
+                    CaballosEnConflicto[indice, 0] = $"conflicto con {poscaballos[i]}";
+                    CaballosEnConflicto[indice, 1] = cab;
+                    indice += 1;
+                    break;
+                }
             }
         }
     }
+}
 
-    Console.WriteLine();
+for (int k = 0; k < poscaballos.Length; k++)
+{
+    Conflito = "";
+
+    for (int t = 0; t < 6; t++)
+    {
+        if (poscaballos[k] == CaballosEnConflicto[t, 1])
+        {
+            Conflito = Conflito + " " + CaballosEnConflicto[t, 0];
+        }
+    }
+
+    Console.WriteLine(
+        value: $"Analizando Caballo en {poscaballos[k]} => {Conflito}"
+    );
 }
